@@ -1,55 +1,50 @@
-# Render Blueprint — Droply
-# Deploys the full app (frontend bundle + signaling server) as ONE web service.
-#
-# Droply is compute-only by design:
-#   - No database: rooms live in server memory and expire automatically.
-#   - No file storage: files travel browser-to-browser over WebRTC; the
-#     server only relays tiny signaling messages.
-# So a single web service with a small disk image is the entire deployment.
-#
-# Deploy: push this repo to GitHub, then in Render choose
-# "New Blueprint" and point it at the repository.
-
 services:
   - type: web
     name: droply
     runtime: node
-    plan: starter # scale the plan for more CPU/RAM; see README scaling notes
-    region: oregon # pick the region closest to most of your users
+    plan: free
+    region: singapore
     branch: main
     autoDeploy: true
-    # Render runs npm install and the build, then starts the server.
+
     buildCommand: npm ci && npm run build
     startCommand: npm start
+
     healthCheckPath: /health
+
     envVars:
       - key: NODE_ENV
         value: production
+
       - key: NODE_VERSION
         value: "24"
-      # Render terminates TLS and proxies to the app; honor X-Forwarded-For
-      # so per-IP rate limiting sees real client IPs.
+
       - key: TRUST_PROXY
         value: "true"
-      # Same-origin signaling only. Add your custom domain once attached,
-      # e.g. https://droply.yourdomain.com
+
       - key: ALLOWED_ORIGINS
         sync: false
-      # Room lifetime (seconds). 1800 = 30 minutes of idle before expiry.
+
       - key: ROOM_TTL_SECONDS
         value: "1800"
-      # Capacity. Raise alongside the plan size for thousands of users.
+
+      - key: MAX_ROOM_PEERS
+        value: "4"
+
       - key: MAX_CONNECTIONS
-        value: "2000"
+        value: "100"
+
       - key: MAX_ROOMS
-        value: "20000"
-      # NAT traversal. Public Google STUN works for most peers; add a TURN
-      # relay for restrictive networks (see README "Relayed connections").
+        value: "500"
+
       - key: STUN_SERVERS
         value: stun:stun.l.google.com:19302
+
       - key: TURN_URLS
         sync: false
+
       - key: TURN_USERNAME
         sync: false
+
       - key: TURN_CREDENTIAL
         sync: false
