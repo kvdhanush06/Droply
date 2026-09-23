@@ -227,5 +227,4 @@ droply/
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Third-party dependencies are listed in
-[THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+MIT — see [LICENSE](./LICENSE).
