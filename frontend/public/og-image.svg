@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d1512"/>
+  <g transform="translate(120 235)">
+    <path d="M80 0C80 0 20 57.6 20 88.8 20 118.4 41.6 142 80 142s60-23.6 60-53.2C140 57.6 80 0 80 0Z" fill="#12a387"/>
+    <path d="M54 84 80 110l26-26M80 108V62" stroke="#0d1512" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <text x="310" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="120" font-weight="700" fill="#e8f5f0">Droply</text>
+  <text x="312" y="400" font-family="Segoe UI, Arial, sans-serif" font-size="40" fill="#8fbdb0">Send files directly between your devices.</text>
+</svg>

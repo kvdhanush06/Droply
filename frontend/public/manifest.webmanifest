@@ -1,0 +1,23 @@
+{
+  "name": "Droply",
+  "short_name": "Droply",
+  "description": "Send files and text directly between your devices. No uploads, no accounts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1512",
+  "theme_color": "#0b6b5b",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

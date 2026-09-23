@@ -1,0 +1,15 @@
+node_modules
+dist
+coverage
+.git
+.gitignore
+*.log
+.env
+.env.local
+playwright-report
+test-results
+frontend/test
+backend/test
+docs
+npm-install*.log
+server-smoke*.log

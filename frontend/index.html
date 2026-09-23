@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Droply — Send Files Directly Between Devices</title>
+    <meta
+      name="description"
+      content="Fast, private, browser-based file and text transfer between your devices. No uploads, no accounts, no cloud storage."
+    />
+    <link rel="canonical" href="https://droply.example/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Droply" />
+    <meta property="og:title" content="Droply — Send Files Directly Between Devices" />
+    <meta
+      property="og:description"
+      content="Fast, private, browser-based file and text transfer between your devices. No uploads, no accounts, no cloud storage."
+    />
+    <meta property="og:image" content="/og-image.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Droply — Send Files Directly Between Devices" />
+    <meta
+      name="twitter:description"
+      content="Fast, private, browser-based file and text transfer between your devices. No uploads, no accounts, no cloud storage."
+    />
+    <meta name="theme-color" content="#0b6b5b" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1512" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of the wrong theme.
+      (function () {
+        try {
+          var stored = localStorage.getItem('droply-theme');
+          var dark =
+            stored === 'dark' ||
+            (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (e) {
+          /* storage unavailable — fall back to system theme via CSS */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
