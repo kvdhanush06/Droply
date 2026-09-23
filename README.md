@@ -6,12 +6,18 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)](#project-layout)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
+## Live Demo
+
+**https://droply.allkvd.dev/**
+
+Droply is a browser-based peer-to-peer transfer tool for moving files, folders and text directly between devices without uploading the payload to a server.
+
 ## Executive summary
 
-Droply is a browser-based peer-to-peer transfer tool. Create a room, connect a second device with a
-link, room code or QR scan — then send files, entire folders (optionally zipped on the fly) or text
+Droply is a browser-based peer-to-peer transfer tool. Create a room, connect a second device with a link,
+room code or QR scan — then send files, entire folders (optionally zipped on the fly) or text
 straight across. Bytes travel device-to-device over a DTLS-encrypted WebRTC DataChannel; the server
-relays only the tiny signaling messages needed to set the connection up. Transfers are
+relays only the signaling messages needed to set the connection up. Transfers are
 consent-first, optionally password-protected end to end, and resume automatically after a dropped
 link.
 
@@ -39,7 +45,7 @@ flowchart LR
     TA == "files, folders, text<br/>DTLS-encrypted DataChannel" ==> TB
 ```
 
-The server **never** touches file bytes. In the normal P2P path it sees room codes, anonymous peer
+The server **never touches file bytes**. In the normal P2P path it sees room codes, anonymous peer
 ids and signaling metadata — in memory only, never persisted.
 
 ## Feature matrix
@@ -79,9 +85,8 @@ ids and signaling metadata — in memory only, never persisted.
   event-driven (`bufferedamountlow`), so throughput tracks the network without polling.
 - Progress UI updates are throttled per transfer (150 ms) to keep renders cheap with many
   concurrent transfers.
-- A single process comfortably serves ~2 000 concurrent signaling connections / 20 000 rooms as
-  configured in `render.yaml`; raise the caps with the instance size. File throughput is bounded by
-  the peers' network, not the server.
+- A single process comfortably serves signaling traffic; file throughput is bounded by the peers'
+  network, not the server. Capacity limits are configurable through environment variables.
 
 ## Installation & configuration
 
@@ -117,16 +122,30 @@ All settings are environment variables — see [`.env.example`](./.env.example).
 The browser fetches ICE servers from `GET /api/config`, so STUN/TURN can change without rebuilding
 the frontend.
 
-## Deployment (Render Blueprint)
+## Deployment
 
-1. Push this repository to GitHub.
-2. In Render: **New → Blueprint**, select the repo — [`render.yaml`](./render.yaml) defines
-   everything.
-3. Set `ALLOWED_ORIGINS` to your final URL (e.g. `https://droply.onrender.com`) and add TURN
-   credentials if you have a relay.
+### Render
 
-No database or disk is provisioned — the service is compute-only by design. The same container runs
-anywhere via `docker build -t droply . && docker run -p 3000:3000 droply`.
+Droply is deployed as a single compute-only Node.js service on Render:
+
+- **Live:** https://droply.allkvd.dev/
+- **Health:** https://droply.allkvd.dev/health
+- **WebSocket signaling:** `wss://droply.allkvd.dev/ws`
+- **Blueprint:** [`render.yaml`](./render.yaml)
+
+The deployment uses `npm ci --include=dev && npm run build` so Vite and other build-time development
+dependencies are available during the production build. No database or persistent disk is required.
+
+### Docker
+
+The same application can run as a single container anywhere Docker is supported:
+
+```bash
+docker build -t droply .
+docker run -p 3000:3000 droply
+```
+
+No database or disk is provisioned — the service is compute-only by design.
 
 ### Relayed connections (TURN)
 
@@ -172,9 +191,9 @@ npm run test:e2e -w frontend   # Playwright: two real browsers, text + files
 - **Backend (48):** unit tests for config, protocol, rooms, rate limiting, room ids, plus a live
   integration suite driving real WebSocket clients through create/join/relay/full-room/expiry and
   HTTP endpoints.
-- **Frontend (56):** protocol parsing, signaling validation, formatting, component tests, and
-  deterministic two-engine transfer-flow integration tests covering consent, per-item selection,
-  password success/failure, zip batching and queue draining.
+- **Frontend (56):** protocol parsing, signaling validation, formatting, component tests, transfer-flow
+  integration tests covering consent, per-item selection, password success/failure, zip batching and
+  queue draining.
 - **E2E (Playwright):** create → join → connect → send text → send small and multi-MB files with
   receiver consent → verify byte-identical downloads, plus landing/404 flows.
 
